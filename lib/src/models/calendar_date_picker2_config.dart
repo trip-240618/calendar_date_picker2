@@ -126,6 +126,8 @@ typedef SelectableYearPredicate = bool Function(int year);
 /// Predicate to determine whether a month should be selectable.
 typedef SelectableMonthPredicate = bool Function(int year, int month);
 
+
+
 /// Custom configuration for CalendarDatePicker2
 class CalendarDatePicker2Config {
   CalendarDatePicker2Config({
@@ -200,6 +202,7 @@ class CalendarDatePicker2Config {
     this.dayModeScrollDirection,
     this.selectedRangeHighlightBuilder,
     this.selectedRangeDecorationPredicate,
+    this.todayColor,
   })  : calendarType = calendarType ?? CalendarDatePicker2Type.single,
         firstDate = DateUtils.dateOnly(firstDate ?? DateTime(1970)),
         lastDate =
@@ -430,6 +433,8 @@ class CalendarDatePicker2Config {
 
   /// Predicate to determine the day widget box decoration for a day in selected range
   final SelectedRangeDecorationPredicate? selectedRangeDecorationPredicate;
+
+  final Color? todayColor;
 
   /// Copy the current [CalendarDatePicker2Config] with some new values
   CalendarDatePicker2Config copyWith({

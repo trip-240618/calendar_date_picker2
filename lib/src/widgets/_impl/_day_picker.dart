@@ -127,9 +127,9 @@ class _DayPickerState extends State<_DayPicker> {
     final Color enabledDayColor = colorScheme.onSurface.withValues(alpha: 0.87);
     final Color disabledDayColor =
         colorScheme.onSurface.withValues(alpha: 0.38);
-    final Color selectedDayColor = colorScheme.onPrimary;
+    final Color selectedDayColor = Color(0xff212121);
     final Color selectedDayBackground = colorScheme.primary;
-    final Color todayColor = colorScheme.primary;
+    final Color todayColor = widget.config.todayColor??const Color(0xff647AED);
     final Color daySplashColor = widget.config.daySplashColor ??
         selectedDayBackground.withValues(alpha: 0.38);
 
@@ -171,11 +171,10 @@ class _DayPickerState extends State<_DayPicker> {
           dayColor = selectedDayColor;
           decoration = BoxDecoration(
             borderRadius: widget.config.dayBorderRadius,
-            color: widget.config.selectedDayHighlightColor ??
-                selectedDayBackground,
+            color: dayColor,
             shape: widget.config.dayBorderRadius != null
                 ? BoxShape.rectangle
-                : BoxShape.circle,
+                : BoxShape.rectangle,
           );
         } else if (isDisabled) {
           dayColor = disabledDayColor;
@@ -184,11 +183,8 @@ class _DayPickerState extends State<_DayPicker> {
           // border.
           dayColor = widget.config.selectedDayHighlightColor ?? todayColor;
           decoration = BoxDecoration(
-            borderRadius: widget.config.dayBorderRadius,
-            border: Border.all(color: dayColor),
-            shape: widget.config.dayBorderRadius != null
-                ? BoxShape.rectangle
-                : BoxShape.circle,
+              color: dayColor,
+              shape: BoxShape.circle
           );
         }
 
@@ -282,57 +278,50 @@ class _DayPickerState extends State<_DayPicker> {
 
           if (isStartDate) {
             dayWidget = Stack(
-              alignment: AlignmentDirectional.center,
               children: [
-                rangePickerIncludedDayHighlight ??
-                    Row(children: [
-                      const Spacer(),
-                      Expanded(
-                        child: AspectRatio(
-                          aspectRatio: 0.5,
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
                           child: Container(
                             decoration: rangePickerIncludedDayDecoration,
                           ),
                         ),
-                      ),
-                    ]),
+                        const Spacer(),
+                      ],
+                    ),
+                  ],
+                ),
                 dayWidget,
               ],
-            );
+            );;
           } else if (isEndDate) {
             dayWidget = Stack(
-              alignment: AlignmentDirectional.center,
               children: [
-                rangePickerIncludedDayHighlight ??
-                    Row(children: [
-                      Expanded(
-                        child: AspectRatio(
-                          aspectRatio: 0.5,
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
                           child: Container(
                             decoration: rangePickerIncludedDayDecoration,
                           ),
                         ),
-                      ),
-                      const Spacer(),
-                    ]),
+                        const Spacer(),
+                      ],
+                    ),
+                  ],
+                ),
                 dayWidget,
               ],
             );
           } else {
             dayWidget = Stack(
-              alignment: AlignmentDirectional.center,
               children: [
-                rangePickerIncludedDayHighlight ??
-                    Row(children: [
-                      Expanded(
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: Container(
-                            decoration: rangePickerIncludedDayDecoration,
-                          ),
-                        ),
-                      ),
-                    ]),
+                Container(
+                  decoration: rangePickerIncludedDayDecoration,
+                ),
                 dayWidget,
               ],
             );
@@ -340,7 +329,7 @@ class _DayPickerState extends State<_DayPicker> {
         }
 
         dayWidget = Padding(
-          padding: const EdgeInsets.symmetric(vertical: 1),
+          padding: const EdgeInsets.only(top: 10,bottom: 10),
           child: dayWidget,
         );
 
@@ -409,14 +398,20 @@ class _DayPickerState extends State<_DayPicker> {
         Expanded(
           child: AspectRatio(
             aspectRatio: 1,
-            child: Container(
-              decoration: decoration,
-              child: Center(
-                child: Text(
-                  localizations.formatDecimal(day),
-                  style: dayTextStyle,
+            child: Column(
+              children: [
+                Expanded(
+                  child: Container(
+                    decoration: decoration,
+                    child: Center(
+                      child: Text(
+                        localizations.formatDecimal(day),
+                        style: dayTextStyle,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ),
